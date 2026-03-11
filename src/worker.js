@@ -504,34 +504,29 @@ export default {
     }
 
     const response = await env.ASSETS.fetch(request);
+    const contentType = response.headers.get('content-type') || '';
 
-    const contentType = response.headers.get("content-type") || "";
-
-    if (contentType.includes("text/html")) {
+    if (contentType.includes('text/html')) {
       const html = await response.text();
 
       const adConfig = {
-        title: env.AD_TITLE || "",
-        link: env.AD_LINK || "",
-        image: env.AD_IMAGE || ""
+        title: env.AD_TITLE || '',
+        link: env.AD_LINK || '',
+        image: env.AD_IMAGE || '',
       };
 
-      const injected = html
-        .replace(
-          "</head>",
-          `<script>
-      window.__AD_CONFIG__=${JSON.stringify(adConfig)};
-      console.log("AD_CONFIG injected", window.__AD_CONFIG__);
-      </script></head>`
-        )
-        .replace(
-          "<body>",
-          `<body><div style="position:fixed;top:10px;left:10px;z-index:99999;background:red;color:#fff;padding:8px;border-radius:8px;">worker injected</div>`
-        );
+      const injected = html.replace(
+        '</head>',
+        `<script>window.__AD_CONFIG__=${JSON.stringify(adConfig)};</script></head>`
+      );
+
       return new Response(injected, {
-        headers: response.headers
+        status: response.status,
+        statusText: response.statusText,
+        headers: response.headers,
       });
     }
+
     return response;
   },
 };
