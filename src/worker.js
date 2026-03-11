@@ -516,11 +516,18 @@ export default {
         image: env.AD_IMAGE || ""
       };
 
-      const injected = html.replace(
-        "</head>",
-        `<script>window.__AD_CONFIG__=${JSON.stringify(adConfig)}</script></head>`
-      );
-
+      const injected = html
+        .replace(
+          "</head>",
+          `<script>
+      window.__AD_CONFIG__=${JSON.stringify(adConfig)};
+      console.log("AD_CONFIG injected", window.__AD_CONFIG__);
+      </script></head>`
+        )
+        .replace(
+          "<body>",
+          `<body><div style="position:fixed;top:10px;left:10px;z-index:99999;background:red;color:#fff;padding:8px;border-radius:8px;">worker injected</div>`
+        );
       return new Response(injected, {
         headers: response.headers
       });
