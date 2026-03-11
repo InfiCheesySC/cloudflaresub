@@ -541,10 +541,28 @@ export default {
       return handleSub(url, env);
     }
 
-    if (request.method === 'GET' && (url.pathname === '/' || url.pathname === '/index.html')) {
-      return handleIndex(request, env);
-    }
+    const response = await env.ASSETS.fetch(request);
 
-    return env.ASSETS.fetch(request);
+    const contentType = response.headers.get("content-type") || "";
+
+    if (contentType.includes("text/html")) {
+      const html = await response.text();
+
+      const adConfig = {
+        title: env.AD_TITLE || "",
+        link: env.AD_LINK || "",
+        image: env.AD_IMAGE || ""
+      };
+
+      const injected = html.replace(
+        "</head>",
+        `<script>window.__AD_CONFIG__=${JSON.stringify(adConfig)}</script></head>`
+      );
+
+      return new Response(injected, {
+        headers: response.headers
+      });
+    }
+    return response;
   },
 };
