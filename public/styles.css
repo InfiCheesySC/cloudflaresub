@@ -564,3 +564,27 @@ button.small {
     gap: 10px;
   }
 }
+
+.ad-box h3 {
+  margin-bottom: 12px;
+}
+
+.ad-box h3 a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.ad-box h3 a:hover {
+  text-decoration: underline;
+}
+
+.ad-image-link {
+  display: block;
+}
+
+.ad-image {
+  display: block;
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}

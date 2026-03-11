@@ -176,3 +176,31 @@ function escapeHtml(value) {
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
 }
+
+initAdBox();
+
+function initAdBox() {
+  const config = window.__AD_CONFIG__;
+  if (!config || !config.title || !config.link || !config.image) {
+    return;
+  }
+
+  const adBox = document.getElementById('adBox');
+  const adTitleLink = document.getElementById('adTitleLink');
+  const adImageLink = document.getElementById('adImageLink');
+  const adImage = document.getElementById('adImage');
+
+  if (!adBox || !adTitleLink || !adImageLink || !adImage) {
+    return;
+  }
+
+  adTitleLink.textContent = config.title;
+  adTitleLink.href = config.link;
+
+  adImageLink.href = config.link;
+
+  adImage.src = config.image;
+  adImage.alt = config.title;
+
+  adBox.classList.remove('hidden');
+}
