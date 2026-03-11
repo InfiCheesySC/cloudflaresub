@@ -1,4 +1,4 @@
-# CloudflareSub
+# CloudflareSub 测试
 
 一个基于 **Cloudflare Workers**
 的轻量级订阅生成工具，用于整理节点链接并生成多种客户端可用的订阅格式。
