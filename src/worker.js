@@ -481,44 +481,6 @@ function escapeHtml(str = '') {
     .replaceAll("'", '&#39;');
 }
 
-function getAdConfig(env) {
-  const title = String(env.AD_TITLE || '').trim();
-  const link = String(env.AD_LINK || '').trim();
-  const image = String(env.AD_IMAGE || '').trim();
-
-  if (!title || !link || !image) {
-    return null;
-  }
-
-  return { title, link, image };
-}
-
-async function handleIndex(request, env) {
-  const assetResponse = await env.ASSETS.fetch(request);
-  const contentType = assetResponse.headers.get('content-type') || '';
-
-  if (!contentType.includes('text/html')) {
-    return assetResponse;
-  }
-
-  const html = await assetResponse.text();
-  const adConfig = getAdConfig(env);
-
-  const injectedHtml = html.replace(
-    '</head>',
-    `<script>
-window.__AD_CONFIG__ = ${JSON.stringify(adConfig)};
-</script>
-</head>`,
-  );
-
-  return new Response(injectedHtml, {
-    status: assetResponse.status,
-    statusText: assetResponse.statusText,
-    headers: assetResponse.headers,
-  });
-}
-
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
